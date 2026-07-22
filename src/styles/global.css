@@ -145,16 +145,3 @@ hr {
   color: rgb(var(--gray));
   margin-bottom: 2em;
 }
-.post-list {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  margin-top: 3rem;
-  padding-left: 0;
-  list-style: none;
-}
-
-.post-list *,
-.post-card {
-  list-style: none;
-}
