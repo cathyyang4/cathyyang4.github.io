@@ -1,0 +1,128 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Footer from '../components/Footer.astro';
+import Header from '../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
+import { getCollection } from 'astro:content';
+import FormattedDate from '../components/FormattedDate.astro';
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+	</head>
+	<body>
+		<Header />
+		<main>
+			<h1> Cari Y.'s Log  </h1>
+		<p class="intro">
+		 I'm documenting my learning notes in this blog Since 2026. 
+		</p>
+		
+		<section class="post-list">
+		{
+			posts.map((post) => (
+				<article class="post-card">
+				<a href={`/blog/${post.id.replace(/\.mdx?$/, '')}/`} class="post-link">
+				<h2>{post.data.title}</h2>
+				</a>
+
+          <p class="post-description">{post.data.description}</p>
+
+          <p class="post-meta">
+            Cathy YANG · <FormattedDate date={post.data.pubDate} />
+          </p>
+        </article>
+      ))
+    }
+  </section>
+</main>
+<Footer />
+</body>
+</html>
+
+<style>
+.post-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-top: 3rem;
+}
+
+.post-card {
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 1.75rem 2rem;
+
+  background: rgb(var(--white));
+  border: 1px solid rgba(var(--black), 0.14);
+  border-radius: 20px;
+
+  box-shadow: none;
+
+  transition:
+    transform 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.post-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(var(--accent), 0.5);
+  background: rgba(var(--accent), 0.04);
+  box-shadow: none;
+}
+
+.post-link {
+  display: block;
+  text-decoration: none;
+  color: rgb(var(--black));
+}
+
+.post-card h2 {
+  margin: 0;
+  font-size: 2rem;
+  line-height: 1.2;
+  color: rgb(var(--black));
+}
+
+.post-card h2:hover {
+  color: rgb(var(--accent));
+}
+
+.post-description {
+  margin-top: 1rem;
+  margin-bottom: 0;
+  color: rgb(var(--black));
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.post-meta {
+  margin-top: 1.25rem;
+  margin-bottom: 0;
+  font-size: 0.85rem;
+  color: rgb(var(--gray));
+}
+
+@media (max-width: 720px) {
+  .post-list {
+    gap: 1.25rem;
+    margin-top: 2rem;
+  }
+
+  .post-card {
+    padding: 1.25rem;
+    border-radius: 16px;
+  }
+
+  .post-card h2 {
+    font-size: 1.5rem;
+  }
+}
+</style>

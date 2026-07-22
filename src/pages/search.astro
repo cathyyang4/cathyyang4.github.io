@@ -1,0 +1,113 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import FormattedDate from '../components/FormattedDate.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('blog')).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+
+const searchData = posts.map((post) => ({
+  title: post.data.title,
+  description: post.data.description,
+  date: post.data.pubDate,
+  url: `/blog/${post.slug}/`,
+}));
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={`Search | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>Search</h1>
+
+      <input
+        id="searchInput"
+        type="search"
+        placeholder="Search posts..."
+        aria-label="Search posts"
+      />
+
+      <ul id="searchResults"></ul>
+    </main>
+
+    <Footer />
+
+    <script define:vars={{ searchData }}>
+      const input = document.getElementById('searchInput');
+      const results = document.getElementById('searchResults');
+
+      function renderResults(query) {
+        const keyword = query.toLowerCase().trim();
+
+        results.innerHTML = '';
+
+        if (!keyword) {
+          return;
+        }
+
+        const filteredPosts = searchData.filter((post) => {
+          return (
+            post.title.toLowerCase().includes(keyword) ||
+            post.description.toLowerCase().includes(keyword)
+          );
+        });
+
+        if (filteredPosts.length === 0) {
+          results.innerHTML = '<li>No posts found.</li>';
+          return;
+        }
+
+        filteredPosts.forEach((post) => {
+          const li = document.createElement('li');
+          li.innerHTML = `
+            <a href="${post.url}">
+              <h2>${post.title}</h2>
+            </a>
+            <p>${post.description}</p>
+          `;
+          results.appendChild(li);
+        });
+      }
+
+      input.addEventListener('input', (event) => {
+        renderResults(event.target.value);
+      });
+    </script>
+
+    <style>
+      input {
+        width: 100%;
+        padding: 0.8em 1em;
+        margin: 1em 0 2em;
+        font-size: 1rem;
+        border: 1px solid rgb(var(--gray-light));
+        border-radius: 8px;
+      }
+
+      input:focus {
+        outline: 2px solid rgb(var(--accent));
+      }
+
+      #searchResults {
+        list-style: none;
+        padding: 0;
+      }
+
+      #searchResults li {
+        margin-bottom: 1.5em;
+      }
+
+      #searchResults h2 {
+        margin-bottom: 0.2em;
+      }
+    </style>
+  </body>
+</html>

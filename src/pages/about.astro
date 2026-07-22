@@ -1,0 +1,56 @@
+---
+import BaseHead from '../components/BaseHead.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { SITE_TITLE, SITE_DESCRIPTION } from '../consts';
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead title={`About | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+  </head>
+  <body>
+    <Header />
+    <main>
+      <h1>About Me</h1>
+
+
+    <p>
+      Hi, I'm Cathy.Y (Liu Yang). This is a corner dedicated to observation,
+      reflection, and quiet questioning. Amidst human connections, macro currents,
+      and technological shifts, I seek a lens that is both sharp and detached.
+      No grand conclusions here—just an ongoing inquiry into the real world and
+      the order within, punctuated, of course, by the occasional lighthearted and
+      quirky discovery.
+    </p>
+
+
+    <p>
+      这是一个记录与思辨的小角落。在人与人的交织、宏观的浪潮以及技术的裂变中，保持一种敏锐而抽离的凝视。这里没有宏大的结论，只有关于真实世界与内心秩序的永恒追问——当然，偶尔也会有一些搞笑休闲的边角料。
+    </p>
+	  <p>
+		Cheers， 干杯
+      </p>
+    
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<style>
+  h1 {
+    margin-bottom: 2.5rem;
+  }
+
+  .about-en {
+    font-size: 1.5rem;
+    line-height: 1.8;
+    margin-bottom: 2rem;
+  }
+
+  .about-cn {
+    font-size: 0.65rem;
+    line-height: 1.5;
+  }
+</style>
